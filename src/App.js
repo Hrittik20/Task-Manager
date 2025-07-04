@@ -6,6 +6,7 @@ import { loadFromStorage, saveToStorage, STORAGE_KEYS } from './utils/localStora
 import Login from './components/Login';
 import TaskItem from './components/TaskItem';
 import TaskForm from './components/TaskForm';
+import TaskFilter from './components/TaskFilter';
 
 const sampleTasks = [
   {
@@ -151,7 +152,13 @@ function App() {
       <main className="app-main">
         <div className="task-dashboard">
           <div className="dashboard-header">
-            <h1>Task Filter</h1>
+            <TaskFilter
+              activeFilter={filter}
+              onFilterChange={setFilter}
+              taskCounts={taskCounts}
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+            />
             
             <button
               onClick={() => setShowTaskForm(true)}
