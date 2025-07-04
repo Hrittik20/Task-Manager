@@ -46,7 +46,7 @@ A sleek and modern task management application built with React that helps you s
 5. **Theme Toggle** - Switch between light and dark mode using the theme toggle button
 
 ## 🔗 Live Demo
-[Link to deployed application] - *Deploy to Netlify, Vercel, or GitHub Pages*
+[Link to deployed application](https://task-manager-f98thqlcp-hrittiks-projects-9bda8799.vercel.app/)
 
 ## 🖼 Screenshots
 
