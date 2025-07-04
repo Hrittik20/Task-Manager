@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, Moon, Sun, Filter } from 'lucide-react';
 
-import './App.css';
+import './styles/App.css';
 import { loadFromStorage, saveToStorage, STORAGE_KEYS } from './utils/localStorage';
 import Login from './components/Login';
 import TaskItem from './components/TaskItem';
@@ -43,12 +43,30 @@ function App() {
   const [editingTask, setEditingTask] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     const savedUser = loadFromStorage(STORAGE_KEYS.USER);
-
+    const savedTasks = loadFromStorage(STORAGE_KEYS.TASKS);
+    const savedTheme = loadFromStorage(STORAGE_KEYS.THEME);
+    
     if (savedUser) setUser(savedUser);
-  })
+    if (savedTasks && savedTasks.length > 0) {
+      setTasks(savedTasks);
+    } else {
+      setTasks(sampleTasks);
+    }
+    if (savedTheme) setDarkMode(savedTheme);
+  }, []);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.TASKS, tasks);
+  }, [tasks]);
+
+  useEffect(() => {
+    document.body.className = darkMode ? 'dark' : '';
+    saveToStorage(STORAGE_KEYS.THEME, darkMode);
+  }, [darkMode]);
 
   const handleLogin = (username) => {
     setUser(username);
@@ -122,26 +140,26 @@ function App() {
     completed: tasks.filter(task => task.completed).length
   });
 
-  if(!user){
-    return <Login onLogin={handleLogin} />
+  if (!user) {
+    return <Login onLogin={handleLogin} />;
   }
 
   const filteredTasks = getFilteredTasks();
   const taskCounts = getTaskCounts();
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className={`app ${darkMode ? 'dark' : ''}`}>
+      <header className="app-header">
         <div className="header-content">
           <h1>Task Manager</h1>
           <div className="header-actions">
             <button
-              onClick={() => console.log("Dark Mode")}
+              onClick={() => setDarkMode(!darkMode)}
               className="theme-toggle"
             >
-              dark mode
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <span className="user-info">Welcome, user!</span>
+            <span className="user-info">Welcome, {user}!</span>
             <button onClick={handleLogout} className="logout-btn">
               Logout
             </button>
